@@ -3154,8 +3154,6 @@ void Environment_DrawSkyboxStar(Gfx** gfxp, f32 x, f32 y, s32 width, s32 height)
     *gfxp = gfx;
 }
 
-#define PACK_RGBA(color) (u32)(((u8)color.r << 24) | ((u8)color.g << 16) | ((u8)color.b << 8) | ((u8)color.a))
-
 void Environment_DrawSkyboxStarsImpl(PlayState* play, Gfx** gfxP) {
     static const Vec3s D_801DD880[] = {
         { 0x0384, 0x2328, 0xD508 }, { 0x09C4, 0x2328, 0xDA1C }, { 0x0E74, 0x22D8, 0xDA1C }, { 0x1450, 0x2468, 0xD8F0 },
@@ -3270,9 +3268,11 @@ void Environment_DrawSkyboxStarsImpl(PlayState* play, Gfx** gfxP) {
         }
 
         if ((i < 15) || ((i == 15) && ((((void)0, gSaveContext.save.day) % 7) == 0))) {
-            gDPSetColor(gfx++, G_SETPRIMCOLOR, PACK_RGBA(D_801DD8E0[i % ARRAY_COUNTU(D_801DD8E0)]));
+            Color_RGBA8 color = D_801DD8E0[i % ARRAY_COUNTU(D_801DD8E0)];
+            gDPSetPrimColor(gfx++, 0, 0, color.r, color.g, color.b, color.a);
         } else if (((i & 0x3F) == 0) || (i == 16)) {
-            gDPSetColor(gfx++, G_SETPRIMCOLOR, PACK_RGBA(D_801DD900[phi_v1 % ARRAY_COUNTU(D_801DD900)]));
+            Color_RGBA8 color = D_801DD900[phi_v1 % ARRAY_COUNTU(D_801DD900)];
+            gDPSetPrimColor(gfx++, 0, 0, color.r, color.g, color.b, color.a);
             phi_v1++;
         }
 

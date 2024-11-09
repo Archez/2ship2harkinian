@@ -509,7 +509,7 @@ void Check2ShipArchiveVersion(std::string archivePath) {
 // Checks the program version stored in the o2r and compares the major/minor value to 2ship
 // For Windows/Mac/Linux if the version doesn't match, offer to regenerate it
 void DetectArchiveVersion(std::string fileName, bool isO2rType) {
-    bool isArchiveOld = false;
+    bool isArchiveOld = true;
     std::string archivePath = Ship::Context::LocateFileAcrossAppDirs(fileName, appShortName);
 
     // Doesn't exist so nothing to do here

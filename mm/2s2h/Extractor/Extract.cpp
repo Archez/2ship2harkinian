@@ -42,6 +42,11 @@
 
 #include <SDL2/SDL_messagebox.h>
 
+#include "libultraship/luslog.h"
+#include <spdlog/spdlog.h>
+#include <spdlog/fmt/fmt.h>
+#include <errno.h>
+
 #include <array>
 #include <fstream>
 #include <filesystem>
@@ -189,6 +194,11 @@ void Extractor::FilterRoms(std::vector<std::string>& roms, RomSearchMode searchM
 }
 
 void Extractor::GetRoms(std::vector<std::string>& roms) {
+    SPDLOG_ERROR("MY PATH: {}", mSearchPath.c_str());
+
+    SDL_ShowSimpleMessageBox(SDL_MESSAGEBOX_INFORMATION, "TEST",
+                             mSearchPath.c_str(),
+                             nullptr);
 #ifdef _WIN32
     WIN32_FIND_DATAA ffd;
     HANDLE h = FindFirstFileA(".\\*", &ffd);
@@ -206,6 +216,10 @@ void Extractor::GetRoms(std::vector<std::string>& roms) {
     //    CloseHandle(h);
     //}
 #elif unix
+    SPDLOG_ERROR("UNIX {}", "");
+    SDL_ShowSimpleMessageBox(SDL_MESSAGEBOX_INFORMATION, "UNIX",
+                             "UNIX",
+                             nullptr);
     // Open the directory of the app.
     DIR* d = opendir(mSearchPath.c_str());
     struct dirent* dir;
@@ -215,13 +229,39 @@ void Extractor::GetRoms(std::vector<std::string>& roms) {
         while ((dir = readdir(d)) != NULL) {
             struct stat path;
 
+            auto fullPath = std::filesystem::path(mSearchPath) / dir->d_name;
+            auto fullPathString = fullPath.string();
+            const char* fullPathCStr = fullPathString.c_str();
+
+            SPDLOG_ERROR("ITEM: {}", dir->d_name);
+            SDL_ShowSimpleMessageBox(SDL_MESSAGEBOX_INFORMATION, "ITEM",
+                             fullPathCStr,
+                             nullptr);
+            errno = 0;
+
             // Check if current entry is not folder
-            stat(dir->d_name, &path);
+            int err = stat(fullPathCStr, &path);
+
+            if (err != 0) {
+                SDL_ShowSimpleMessageBox(SDL_MESSAGEBOX_INFORMATION, "STAT",
+                             fmt::format("{}", errno).c_str(),
+                             nullptr);
+            } 
+
             if (S_ISREG(path.st_mode)) {
+                SDL_ShowSimpleMessageBox(SDL_MESSAGEBOX_INFORMATION, "IS REG",
+                    dir->d_name,
+                    nullptr);
 
                 // Get the position of the extension character.
                 char* ext = strrchr(dir->d_name, '.');
+                SDL_ShowSimpleMessageBox(SDL_MESSAGEBOX_INFORMATION, "EXT",
+                    ext,
+                    nullptr);
                 if (ext != NULL && (strcmp(ext, ".z64") == 0 || strcmp(ext, ".n64") == 0 || strcmp(ext, ".v64") == 0)) {
+                    SDL_ShowSimpleMessageBox(SDL_MESSAGEBOX_INFORMATION, "IS ROM",
+                        dir->d_name,
+                        nullptr);
                     roms.push_back(dir->d_name);
                 }
             }
@@ -229,7 +269,15 @@ void Extractor::GetRoms(std::vector<std::string>& roms) {
     }
     closedir(d);
 #else
+    SPDLOG_ERROR("ELSE {}", "");
+    SDL_ShowSimpleMessageBox(SDL_MESSAGEBOX_INFORMATION, "ELSE",
+                             "ELSE",
+                             nullptr);
     for (const auto& file : std::filesystem::directory_iterator(mSearchPath)) {
+        SPDLOG_ERROR("ITEM: {}", file.path().string().c_str());
+        SDL_ShowSimpleMessageBox(SDL_MESSAGEBOX_INFORMATION, "ITEM",
+                             file.path().string().c_str(),
+                             nullptr);
         if (file.is_directory())
             continue;
         if ((file.path().extension() == ".n64") || (file.path().extension() == ".z64") ||

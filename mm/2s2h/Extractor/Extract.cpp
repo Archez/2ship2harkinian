@@ -233,36 +233,17 @@ void Extractor::GetRoms(std::vector<std::string>& roms) {
             auto fullPathString = fullPath.string();
             const char* fullPathCStr = fullPathString.c_str();
 
-            SPDLOG_ERROR("ITEM: {}", dir->d_name);
-            SDL_ShowSimpleMessageBox(SDL_MESSAGEBOX_INFORMATION, "ITEM",
-                             fullPathCStr,
-                             nullptr);
-            errno = 0;
-
             // Check if current entry is not folder
-            int err = stat(fullPathCStr, &path);
-
-            if (err != 0) {
-                SDL_ShowSimpleMessageBox(SDL_MESSAGEBOX_INFORMATION, "STAT",
-                             fmt::format("{}", errno).c_str(),
-                             nullptr);
-            } 
+            stat(fullPathCStr, &path);
 
             if (S_ISREG(path.st_mode)) {
-                SDL_ShowSimpleMessageBox(SDL_MESSAGEBOX_INFORMATION, "IS REG",
-                    dir->d_name,
-                    nullptr);
-
                 // Get the position of the extension character.
                 char* ext = strrchr(dir->d_name, '.');
-                SDL_ShowSimpleMessageBox(SDL_MESSAGEBOX_INFORMATION, "EXT",
-                    ext,
-                    nullptr);
                 if (ext != NULL && (strcmp(ext, ".z64") == 0 || strcmp(ext, ".n64") == 0 || strcmp(ext, ".v64") == 0)) {
                     SDL_ShowSimpleMessageBox(SDL_MESSAGEBOX_INFORMATION, "IS ROM",
                         dir->d_name,
                         nullptr);
-                    roms.push_back(dir->d_name);
+                    roms.push_back(fullPathCStr);
                 }
             }
         }

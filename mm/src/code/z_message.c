@@ -6156,8 +6156,13 @@ void Message_Update(PlayState* play) {
             gSaveContext.save.cutsceneIndex = sp44;
 
             if (gSaveContext.fileNum != 0xFF) {
-                Sram_SetFlashPagesDefault(&play->sramCtx, gFlashSaveStartPages[gSaveContext.fileNum * 2],
-                                          gFlashSpecialSaveNumPages[gSaveContext.fileNum * 2]);
+                if (CVarGetInteger("gEnhancements.Saving.FileSlot3", true)) {
+                    Sram_SetFlashPagesDefault(&play->sramCtx, gFlashSaveStartPages3Files[gSaveContext.fileNum * 2],
+                                              gFlashSpecialSaveNumPages3Files[gSaveContext.fileNum * 2]);
+                } else {
+                    Sram_SetFlashPagesDefault(&play->sramCtx, gFlashSaveStartPages[gSaveContext.fileNum * 2],
+                                              gFlashSpecialSaveNumPages[gSaveContext.fileNum * 2]);
+                }
                 Sram_StartWriteToFlashDefault(&play->sramCtx);
             }
             msgCtx->msgMode = MSGMODE_NEW_CYCLE_1;

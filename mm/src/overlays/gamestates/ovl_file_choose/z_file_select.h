@@ -196,20 +196,22 @@ typedef struct FileSelectState {
     /* 0x243E8 */ Vtx* keyboardVtx;
     /* 0x243EC */ Vtx* nameEntryVtx;
     /* 0x243F0 */ Vtx* keyboard2Vtx;
-    /* 0x243F4 */ u8 newf[4][6];
-    /* 0x2440C */ u16 threeDayResetCount[4];
-    /* 0x24414 */ char fileNames[4][8];
-    /* 0x24434 */ s16 healthCapacity[4];
-    /* 0x2443C */ s16 health[4];
-    /* 0x24444 */ u32 questItems[4];
-    /* 0x24454 */ s8 defenseHearts[4];
-    /* 0x24458 */ u16 time[4];
-    /* 0x24460 */ s16 day[4];
-    /* 0x24468 */ u8 isOwlSave[4];
-    /* 0x2446C */ s16 rupees[4];
-    /* 0x24474 */ u8 walletUpgrades[4];
-    /* 0x24478 */ u8 maskCount[4];
-    /* 0x2447C */ u8 heartPieceCount[4];
+    // #region 2S2h [Enhancement] Increased the following arrays from 4 -> 6 to add support for a 3rd file slot
+    /* 0x243F4 */ u8 newf[6][6];
+    /* 0x2440C */ u16 threeDayResetCount[6];
+    /* 0x24414 */ char fileNames[6][8];
+    /* 0x24434 */ s16 healthCapacity[6];
+    /* 0x2443C */ s16 health[6];
+    /* 0x24444 */ u32 questItems[6];
+    /* 0x24454 */ s8 defenseHearts[6];
+    /* 0x24458 */ u16 time[6];
+    /* 0x24460 */ s16 day[6];
+    /* 0x24468 */ u8 isOwlSave[6];
+    /* 0x2446C */ s16 rupees[6];
+    /* 0x24474 */ u8 walletUpgrades[6];
+    /* 0x24478 */ u8 maskCount[6];
+    /* 0x2447C */ u8 heartPieceCount[6];
+    // #endregion
     /* 0x24480 */ s16 buttonIndex; // enum will depend on `ConfigMode`
     /* 0x24482 */ s16 confirmButtonIndex; // see `ConfirmButtonIndex` enum
     /* 0x24484 */ s16 menuMode; // see `MenuMode` enum

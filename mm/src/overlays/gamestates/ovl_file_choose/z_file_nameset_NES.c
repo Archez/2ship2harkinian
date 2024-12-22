@@ -520,8 +520,14 @@ void FileSelect_DrawNameEntry(GameState* thisx) {
                                 if (!gSaveContext.flashSaveAvailable) {
                                     this->configMode = CM_NAME_ENTRY_TO_MAIN;
                                 } else {
-                                    Sram_SetFlashPagesDefault(sramCtx, gFlashSaveStartPages[this->buttonIndex * 2],
-                                                              gFlashSpecialSaveNumPages[this->buttonIndex * 2]);
+                                    if (CVarGetInteger("gEnhancements.Saving.FileSlot3", true)) {
+                                        Sram_SetFlashPagesDefault(
+                                            sramCtx, gFlashSaveStartPages3Files[this->buttonIndex * 2],
+                                            gFlashSpecialSaveNumPages3Files[this->buttonIndex * 2]);
+                                    } else {
+                                        Sram_SetFlashPagesDefault(sramCtx, gFlashSaveStartPages[this->buttonIndex * 2],
+                                                                  gFlashSpecialSaveNumPages[this->buttonIndex * 2]);
+                                    }
                                     Sram_StartWriteToFlashDefault(sramCtx);
                                     this->configMode = CM_NAME_ENTRY_WAIT_FOR_FLASH_SAVE;
                                 }

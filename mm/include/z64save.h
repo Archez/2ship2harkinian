@@ -1742,8 +1742,11 @@ void Sram_ResetSaveFromMoonCrash(SramContext* sramCtx);
 void Sram_OpenSave(struct FileSelectState* fileSelect, SramContext* sramCtx);
 void func_8014546C(SramContext* sramCtx);
 void func_801457CC(struct GameState* gameState, SramContext* sramCtx);
+void func_801457CC_3Files(struct GameState* gameState, SramContext* sramCtx);
 void Sram_EraseSave(struct FileSelectState* fileSelect2, SramContext* sramCtx, s32 fileNum);
+void Sram_EraseSave_3Files(struct FileSelectState* fileSelect2, SramContext* sramCtx, s32 fileNum);
 void Sram_CopySave(struct FileSelectState* fileSelect2, SramContext* sramCtx);
+void Sram_CopySave_3Files(struct FileSelectState* fileSelect2, SramContext* sramCtx);
 void Sram_InitSave(struct FileSelectState* fileSelect2, SramContext* sramCtx);
 void Sram_WriteSaveOptionsToBuffer(SramContext* sramCtx);
 void Sram_InitSram(struct GameState* gameState, SramContext* sramCtx);
@@ -1767,5 +1770,9 @@ extern s32 gFlashSaveNumPages[];
 extern s32 gFlashSpecialSaveNumPages[];
 extern s32 gFlashOwlSaveStartPages[];
 extern s32 gFlashOwlSaveNumPages[];
+
+extern s32 gFlashSaveStartPages3Files[14];
+extern s32 gFlashSaveNumPages3Files[];
+extern s32 gFlashSpecialSaveNumPages3Files[];
 
 #endif

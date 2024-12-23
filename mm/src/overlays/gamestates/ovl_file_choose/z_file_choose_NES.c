@@ -861,14 +861,8 @@ void FileSelect_SetWindowContentVtx(GameState* thisx) {
         // Account for owl-save offset
 
         spAC = j;
-        if (CVarGetInteger("gEnhancements.Saving.FileSlot3", true)) {
-            if (this->isOwlSave[j + 3]) {
-                spAC = j + 3;
-            }
-        } else {
-            if (this->isOwlSave[j + 2]) {
-                spAC = j + 2;
-            }
+        if (this->isOwlSave[j + 3]) {
+            spAC = j + 3;
         }
 
         /* File name */
@@ -1427,14 +1421,8 @@ void FileSelect_DrawFileInfo(GameState* thisx, s16 fileIndex) {
     }
 
     if ((fileIndex == this->selectedFileIndex) || (fileIndex == this->copyDestFileIndex)) {
-        if (CVarGetInteger("gEnhancements.Saving.FileSlot3", true)) {
-            if (this->isOwlSave[fileIndex + 3]) {
-                sp20C = fileIndex + 3;
-            }
-        } else {
-            if (this->isOwlSave[fileIndex + 2]) {
-                sp20C = fileIndex + 2;
-            }
+        if (this->isOwlSave[fileIndex + 3]) {
+            sp20C = fileIndex + 3;
         }
 
         gDPPipeSync(POLY_OPA_DISP++);
@@ -1576,8 +1564,7 @@ void FileSelect_DrawFileInfo(GameState* thisx, s16 fileIndex) {
         }
     }
 
-    if ((!CVarGetInteger("gEnhancements.Saving.FileSlot3", true) && this->isOwlSave[fileIndex + 2]) ||
-        (CVarGetInteger("gEnhancements.Saving.FileSlot3", true) && this->isOwlSave[fileIndex + 3])) {
+    if (this->isOwlSave[fileIndex + 3]) {
         gDPPipeSync(POLY_OPA_DISP++);
         gDPSetCombineMode(POLY_OPA_DISP++, G_CC_MODULATEIA_PRIM, G_CC_MODULATEIA_PRIM);
 
@@ -1727,10 +1714,7 @@ void FileSelect_DrawWindowContents(GameState* thisx) {
             gSPVertex(POLY_OPA_DISP++, &this->windowContentVtx[temp], 28, 0);
 
             for (quadVtxIndex = 0, i = 0; i < 7; i++, quadVtxIndex += 4) {
-                if ((i < 5) ||
-                    (((!CVarGetInteger("gEnhancements.Saving.FileSlot3", true) && this->isOwlSave[fileIndex + 2]) ||
-                      (CVarGetInteger("gEnhancements.Saving.FileSlot3", true) && this->isOwlSave[fileIndex + 3])) &&
-                     (i >= 5))) {
+                if ((i < 5) || (this->isOwlSave[fileIndex + 3] && (i >= 5))) {
                     gDPLoadTextureBlock(POLY_OPA_DISP++, sFileInfoBoxTextures[i], G_IM_FMT_IA, G_IM_SIZ_16b,
                                         sFileInfoBoxPartWidths[i], 56, 0, G_TX_NOMIRROR | G_TX_WRAP,
                                         G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMASK, G_TX_NOMASK, G_TX_NOLOD, G_TX_NOLOD);
@@ -1770,8 +1754,7 @@ void FileSelect_DrawWindowContents(GameState* thisx) {
                                 G_TX_NOLOD, G_TX_NOLOD);
             gSP1Quadrangle(POLY_OPA_DISP++, 8, 10, 11, 9, 0);
 
-            if ((!CVarGetInteger("gEnhancements.Saving.FileSlot3", true) && this->isOwlSave[i + 2]) ||
-                (CVarGetInteger("gEnhancements.Saving.FileSlot3", true) && this->isOwlSave[i + 3])) {
+            if (this->isOwlSave[i + 3]) {
                 gDPSetPrimColor(POLY_OPA_DISP++, 0, 0, sWindowContentColors[0], sWindowContentColors[1],
                                 sWindowContentColors[2], this->nameBoxAlpha[i]);
                 gDPLoadTextureBlock(POLY_OPA_DISP++, gFileSelBlankButtonTex, G_IM_FMT_IA, G_IM_SIZ_16b, 52, 16, 0,
@@ -2465,11 +2448,7 @@ void FileSelect_InitContext(GameState* thisx) {
     EnvironmentContext* envCtx = &this->envCtx;
 
     Sram_Alloc(&this->state, &this->sramCtx);
-    if (CVarGetInteger("gEnhancements.Saving.FileSlot3", true)) {
-        func_801457CC_3Files(&this->state, &this->sramCtx);
-    } else {
-        func_801457CC(&this->state, &this->sramCtx);
-    }
+    func_801457CC(&this->state, &this->sramCtx);
 
     this->menuMode = FS_MENU_MODE_INIT;
 

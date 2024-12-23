@@ -434,21 +434,12 @@ void FileSelect_CopyConfirm(GameState* thisx) {
         this->fileInfoAlpha[this->copyDestFileIndex] = this->nameAlpha[this->copyDestFileIndex];
         this->nextTitleLabel = FS_TITLE_COPY_COMPLETE;
         this->actionTimer = 4;
-        if (CVarGetInteger("gEnhancements.Saving.FileSlot3", true)) {
-            Sram_CopySave_3Files(this, sramCtx);
-        } else {
-            Sram_CopySave(this, sramCtx);
-        }
+        Sram_CopySave(this, sramCtx);
         if (!gSaveContext.flashSaveAvailable) {
             this->configMode = CM_COPY_ANIM_1;
         } else {
-            if (CVarGetInteger("gEnhancements.Saving.FileSlot3", true)) {
-                Sram_SetFlashPagesDefault(sramCtx, gFlashSaveStartPages3Files[this->copyDestFileIndex * 2],
-                                          gFlashSpecialSaveNumPages3Files[this->copyDestFileIndex * 2]);
-            } else {
-                Sram_SetFlashPagesDefault(sramCtx, gFlashSaveStartPages[this->copyDestFileIndex * 2],
-                                          gFlashSpecialSaveNumPages[this->copyDestFileIndex * 2]);
-            }
+            Sram_SetFlashPagesDefault(sramCtx, gFlashSaveStartPages[this->copyDestFileIndex * 2],
+                                      gFlashSpecialSaveNumPages[this->copyDestFileIndex * 2]);
             Sram_StartWriteToFlashDefault(sramCtx);
             this->configMode = CM_COPY_WAIT_FOR_FLASH_SAVE;
         }
@@ -984,21 +975,12 @@ void FileSelect_EraseConfirm(GameState* thisx) {
         this->actionTimer = 4;
         Audio_PlaySfx(NA_SE_SY_FSEL_CLOSE);
     } else if (CHECK_BTN_ANY(input->press.button, BTN_A | BTN_START)) {
-        if (CVarGetInteger("gEnhancements.Saving.FileSlot3", true)) {
-            Sram_EraseSave_3Files(this, sramCtx, this->selectedFileIndex);
-        } else {
-            Sram_EraseSave(this, sramCtx, this->selectedFileIndex);
-        }
+        Sram_EraseSave(this, sramCtx, this->selectedFileIndex);
         if (!gSaveContext.flashSaveAvailable) {
             this->configMode = CM_ERASE_ANIM_1;
         } else {
-            if (CVarGetInteger("gEnhancements.Saving.FileSlot3", true)) {
-                Sram_SetFlashPagesDefault(sramCtx, gFlashSaveStartPages3Files[this->selectedFileIndex * 2],
-                                          gFlashSpecialSaveNumPages3Files[this->selectedFileIndex * 2]);
-            } else {
-                Sram_SetFlashPagesDefault(sramCtx, gFlashSaveStartPages[this->selectedFileIndex * 2],
-                                          gFlashSpecialSaveNumPages[this->selectedFileIndex * 2]);
-            }
+            Sram_SetFlashPagesDefault(sramCtx, gFlashSaveStartPages[this->selectedFileIndex * 2],
+                                      gFlashSpecialSaveNumPages[this->selectedFileIndex * 2]);
             Sram_StartWriteToFlashDefault(sramCtx);
             this->configMode = CM_ERASE_WAIT_FOR_FLASH_SAVE;
         }

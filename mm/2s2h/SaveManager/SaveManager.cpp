@@ -188,10 +188,10 @@ int SaveManager_GetOpenFileSlot() {
 FlashSlotFile SaveManager_GetFlashSlotFileFromPages(u32 pageNum, u32 pageCount) {
     FlashSlotFile flashSlotFile = FLASH_SLOT_FILE_UNAVAILABLE;
 
-    for (u32 i = 0; i < ARRAY_COUNT(gFlashSaveStartPages3Files); i++) {
+    for (u32 i = 0; i < ARRAY_COUNT(gFlashSaveStartPages); i++) {
         // Verify that the requested pages align with expected values
-        if (pageNum == (u32)gFlashSaveStartPages3Files[i] &&
-            (pageCount == (u32)gFlashSaveNumPages3Files[i] || pageCount == (u32)gFlashSpecialSaveNumPages3Files[i])) {
+        if (pageNum == (u32)gFlashSaveStartPages[i] &&
+            (pageCount == (u32)gFlashSaveNumPages[i] || pageCount == (u32)gFlashSpecialSaveNumPages[i])) {
             flashSlotFile = static_cast<FlashSlotFile>(i);
             break;
         }
@@ -324,9 +324,9 @@ extern "C" void SaveManager_SysFlashrom_WriteData(u8* saveBuffer, u32 pageNum, u
     // saved together. We replicate that here by running the save again on the matching backup slot
     if ((flashSlotFile == FLASH_SLOT_FILE_1_NEW_CYCLE || flashSlotFile == FLASH_SLOT_FILE_2_NEW_CYCLE ||
          flashSlotFile == FLASH_SLOT_FILE_3_NEW_CYCLE) &&
-        pageCount == (u32)gFlashSpecialSaveNumPages3Files[flashSlotFile]) {
-        SaveManager_SysFlashrom_WriteData(saveBuffer, gFlashSaveStartPages3Files[flashSlotFile + 1],
-                                          gFlashSaveNumPages3Files[flashSlotFile + 1]);
+        pageCount == (u32)gFlashSpecialSaveNumPages[flashSlotFile]) {
+        SaveManager_SysFlashrom_WriteData(saveBuffer, gFlashSaveStartPages[flashSlotFile + 1],
+                                          gFlashSaveNumPages[flashSlotFile + 1]);
     }
 
     switch (flashSlotFile) {
